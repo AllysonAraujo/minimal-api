@@ -119,8 +119,8 @@ public class Startup
                 var claims = new List<Claim>()
                 {
                     new Claim("Email", administrador.Email),
-                    new Claim("Perfil", administrador.Perfil),
-                    new Claim(ClaimTypes.Role, administrador.Perfil),
+                    new Claim("Perfil", administrador.Perfil.ToString()),
+                    new Claim(ClaimTypes.Role, administrador.Perfil.ToString()),
                 };
                 
                 var token = new JwtSecurityToken(
@@ -140,7 +140,7 @@ public class Startup
                     return Results.Ok(new AdministradorLogado
                     {
                         Email = adm.Email,
-                        Perfil = adm.Perfil,
+                        Perfil = adm.Perfil.ToString(),
                         Token = token
                     });
                 }
@@ -156,7 +156,7 @@ public class Startup
                     adms.Add(new AdministradorModelView{
                         Id = adm.Id,
                         Email = adm.Email,
-                        Perfil = adm.Perfil
+                        Perfil = adm.Perfil.ToString()
                     });
                 }
                 return Results.Ok(adms);
@@ -171,7 +171,7 @@ public class Startup
                 return Results.Ok(new AdministradorModelView{
                         Id = administrador.Id,
                         Email = administrador.Email,
-                        Perfil = administrador.Perfil
+                        Perfil = administrador.Perfil.ToString()
                 });
             })
             .RequireAuthorization()
@@ -196,7 +196,7 @@ public class Startup
                 var administrador = new Administrador{
                     Email = administradorDTO.Email,
                     Senha = administradorDTO.Senha,
-                    Perfil = administradorDTO.Perfil.ToString() ?? Perfil.Editor.ToString()
+                    Perfil = administradorDTO.Perfil ?? Perfil.Editor
                 };
 
                 administradorServico.Incluir(administrador);
@@ -204,7 +204,7 @@ public class Startup
                 return Results.Created($"/administrador/{administrador.Id}", new AdministradorModelView{
                     Id = administrador.Id,
                     Email = administrador.Email,
-                    Perfil = administrador.Perfil
+                    Perfil = administrador.Perfil.ToString()
                 });
                 
             })
